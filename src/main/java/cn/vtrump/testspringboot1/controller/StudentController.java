@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 @RestController
 @RequestMapping("/student")
@@ -17,6 +19,25 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
+
+    @ApiOperation("添加自定义响应头")
+    @GetMapping("/http-servlet-response")
+    public String usingHttpServletResponse(HttpServletResponse response) {
+        response.addHeader("examHeader","valueOfHeader");
+        return "Response with header using HttpServletResponse";
+    }
+
+    @ApiOperation("添加自定义cookie")
+    @GetMapping("/change-username")
+    public String setCookie(HttpServletResponse response) {
+        // create a cookie
+        Cookie cookie = new Cookie("username", "Jovan");
+
+        //add cookie to response
+        response.addCookie(cookie);
+
+        return "Username is changed!";
+    }
 
     @ApiOperation("查询所有Student")
     @GetMapping("/select/all")
